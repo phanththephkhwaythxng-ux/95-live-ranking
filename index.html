@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="th"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>95 LIVE RANKING</title>
+<style>
+body{margin:0;background:#080808;color:#fff;font-family:system-ui;padding:18px}
+main{max-width:520px;margin:auto}h1{text-align:center}#timer{text-align:center;font-size:52px;background:#191919;border-radius:16px;padding:12px}
+.player{display:flex;justify-content:space-between;padding:14px;margin:8px 0;background:#292018;border-radius:12px;font-weight:bold}
+button,input{padding:12px;border:0;border-radius:10px;margin:4px}button{background:#e52c62;color:white;font-weight:bold}
+#status,#note{color:#ffc86c;font-size:14px}.muted{color:#aaa;font-size:12px}
+</style>
+<main>
+<h1>🏆 95 LIVE RANKING</h1><div id="timer">00:33</div>
+<div id="ranking"></div>
+<button onclick="start()">เริ่มเวลา</button><button onclick="pause()">หยุด</button><button onclick="reset()">รีเซ็ต</button>
+<h3>เชื่อมต่อ TikTok LIVE</h3>
+<input id="username" value="67____50" placeholder="ชื่อบัญชี"><button onclick="connect()">เชื่อมต่อ</button>
+<div id="status">ยังไม่ได้เชื่อมต่อ</div><h3>เหตุการณ์ล่าสุด</h3><div id="feed">รอเหตุการณ์...</div>
+<p class="muted">หน้าเว็บนี้เป็นส่วนแสดงผล ต้องติดตั้งและเปิดเซิร์ฟเวอร์ Node.js ก่อนจึงจะรับเหตุการณ์ LIVE ได้ การเชื่อมต่อเป็นเครื่องมือชุมชนที่ไม่ใช่ API ทางการของ TikTok และอาจใช้งานไม่ได้ทุกบัญชี</p>
+</main>
+<script>
+let scores={},names={},left=33,clock=null;
+function draw(){document.querySelector('#timer').textContent=String(Math.floor(left/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0');let top=Object.keys(scores).sort((a,b)=>scores[b]-scores[a]).slice(0,5);document.querySelector('#ranking').innerHTML=Array.from({length:5},(_,i)=>{let id=top[i];return `<div class="player"><span>${['🥇','🥈','🥉','4.','5.'][i]} ${id?esc(names[id]||id):'รอผู้เล่น'}</span><span>🪙 ${id?scores[id]:0}</span></div>`}).join('')}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function start(){if(clock)return;clock=setInterval(()=>{if(left>0){left--;draw()}else pause()},1000)}
+function pause(){clearInterval(clock);clock=null}
+function reset(){pause();left=33;draw()}
+function log(s){let f=document.querySelector('#feed');f.innerHTML=esc(s)+'<br>'+f.innerHTML}
+async function connect(){let u=document.querySelector('#username').value.trim().replace(/^@/,'');document.querySelector('#status').textContent='หน้าเว็บนี้ยังต้องมีเซิร์ฟเวอร์เชื่อมต่อก่อน';log('ยังไม่ได้เชื่อมต่อบัญชี '+u)}
+draw();
+</script></html>
